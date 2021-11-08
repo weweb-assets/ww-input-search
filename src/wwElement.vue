@@ -8,7 +8,6 @@
                 :ww-props="{ value, delay }"
                 @element-event="handleInputChange"
             ></wwElement>
-            <!-- <input type="text" v-model="value" /> -->
         </div>
         <div v-if="content.submitEvent === 'button'" class="button-container">
             <wwElement class="submitButton" v-bind="content.submitButton" @click="handleClick"></wwElement>
