@@ -5,6 +5,7 @@
                 ref="searchInput"
                 class="textInput"
                 v-bind="content.textInput"
+                :ww-props="{ value, delay }"
                 @element-event="handleInputChange"
             ></wwElement>
         </div>
@@ -71,29 +72,29 @@ export default {
                 '--button-width': buttonWidth,
             };
         },
+        value: {
+            get() {
+                if (!this.content.variable) return '';
+                return wwLib.wwVariable.getValue(this.content.variable);
+            },
+            set(value) {
+                if (!this.content.variable) return;
+                wwLib.wwVariable.updateValue(this.content.variable, value);
+                const eventName = this.content.submitEvent === 'debounce' ? 'change' : 'submit';
+                this.$emit('trigger-event', { name: eventName, event: { value } });
+            },
+        },
+        delay() {
+            return wwLib.wwUtils.getLengthUnit(this.content.debounceDelay)[0];
+        },
     },
     methods: {
-        handleInputChange(event) {
+        handleInputChange(value) {
             if (this.content.submitEvent !== 'debounce') return;
-
-            clearTimeout(this.debounce);
-            this.debounce = setTimeout(() => {
-                this.updateVariableValue(event.target.value);
-            }, wwLib.wwUtils.getLengthUnit(this.content.debounceDelay));
+            this.value = value;
         },
         handleClick() {
-            const value = this.$refs.searchInput.value;
-            this.updateVariableValue(value);
-        },
-        getVariableValue() {
-            if (!this.content.variable) return;
-            return wwLib.wwVariable.getValue(this.content.variable);
-        },
-        updateVariableValue(value) {
-            if (!this.content.variable) return;
-            wwLib.wwVariable.updateValue(this.content.variable, value);
-            const eventName = this.content.submitEvent === 'debounce' ? 'change' : 'submit';
-            this.$emit('trigger-event', { name: eventName, event: { value } });
+            this.value = this.$refs.searchInput.value;
         },
     },
 };
