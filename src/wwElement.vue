@@ -22,17 +22,26 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+
 export default {
     props: {
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
         content: { type: Object, required: true },
+        uid: { type: String, required: true },
     },
     emits: ['update:content', 'trigger-event'],
+    setup(props) {
+        const internalVariableId = computed(() => props.content.variable);
+        const variableId = wwLib.wwVariable.useComponentVariable(props.uid, 'value', '', internalVariableId);
+
+        return { variableId };
+    },
     data() {
         return {
-            debounce: null,
+            internalValue: '',
         };
     },
     computed: {
@@ -74,19 +83,31 @@ export default {
         },
         value: {
             get() {
-                if (!this.content.variable) return '';
-                return wwLib.wwVariable.getValue(this.content.variable);
+                if (this.variableId) return wwLib.wwVariable.getValue(this.variableId);
+                return this.internalValue;
             },
             set(value) {
-                if (!this.content.variable) return;
-                wwLib.wwVariable.updateValue(this.content.variable, value);
                 const eventName = this.content.submitEvent === 'debounce' ? 'change' : 'submit';
                 this.$emit('trigger-event', { name: eventName, event: { value } });
+                this.internalValue = value;
+
+                if (this.variableId) wwLib.wwVariable.updateValue(this.variableId, value);
             },
         },
         delay() {
             return wwLib.wwUtils.getLengthUnit(this.content.debounceDelay)[0];
         },
+    },
+    /* wwEditor:start */
+    watch: {
+        'content.initialValue'(value) {
+            this.value = value;
+        },
+    },
+    /* wwEditor:end */
+    mounted() {
+        if (this.content.initialValue) this.value = this.content.initialValue;
+        this.internalValue = this.value;
     },
     methods: {
         handleInputChange(value) {
