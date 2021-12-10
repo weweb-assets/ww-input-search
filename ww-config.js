@@ -78,7 +78,7 @@ export default {
             section: 'settings',
             defaultValue: true,
         },
-        variable: {
+        variableId: {
             label: {
                 en: 'Associated variable',
             },
@@ -97,7 +97,7 @@ export default {
             type: 'Text',
             section: 'settings',
             bindable: true,
-            hidden: content => content.variable,
+            hidden: content => content.variableId,
             defaultValue: '',
         },
         submitButton: {
