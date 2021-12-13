@@ -78,17 +78,27 @@ export default {
             section: 'settings',
             defaultValue: true,
         },
-        variable: {
+        variableId: {
             label: {
                 en: 'Associated variable',
             },
             type: 'Variable',
             options: {
-                type: 'String',
+                types: ['String', 'Number', 'Query'],
             },
             section: 'settings',
             bindable: true,
             defaultValue: null,
+        },
+        initialValue: {
+            label: {
+                en: 'Initial value',
+            },
+            type: 'Text',
+            section: 'settings',
+            bindable: true,
+            hidden: content => content.variableId,
+            defaultValue: '',
         },
         submitButton: {
             hidden: true,
