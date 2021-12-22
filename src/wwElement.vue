@@ -101,14 +101,14 @@ export default {
     /* wwEditor:start */
     watch: {
         'content.initialValue'(value) {
-            if (value && value !== undefined && !this.content.variableId) {
+            if (value !== undefined && !this.content.variableId) {
                 this.value = value;
             }
         },
     },
     /* wwEditor:end */
     mounted() {
-        if (this.content.initialValue && this.content.initialValue !== undefined && !this.content.variableId) {
+        if (this.content.initialValue !== undefined && !this.content.variableId) {
             this.value = this.content.initialValue;
         }
         this.internalValue = this.value;

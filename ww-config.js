@@ -40,6 +40,28 @@ export default {
             },
             defaultValue: '50%',
         },
+        variableId: {
+            label: {
+                en: 'Associated variable',
+            },
+            type: 'Variable',
+            options: {
+                types: ['String', 'Number', 'Query'],
+            },
+            section: 'settings',
+            hidden: content => content.variableId,
+            defaultValue: null,
+        },
+        initialValue: {
+            label: {
+                en: 'Initial value',
+            },
+            type: 'Text',
+            section: 'settings',
+            bindable: true,
+            hidden: content => content.variableId,
+            defaultValue: '',
+        },
         submitEvent: {
             label: {
                 en: 'Submit event',
@@ -77,28 +99,6 @@ export default {
             },
             section: 'settings',
             defaultValue: true,
-        },
-        variableId: {
-            label: {
-                en: 'Associated variable',
-            },
-            type: 'Variable',
-            options: {
-                types: ['String', 'Number', 'Query'],
-            },
-            section: 'settings',
-            bindable: true,
-            defaultValue: null,
-        },
-        initialValue: {
-            label: {
-                en: 'Initial value',
-            },
-            type: 'Text',
-            section: 'settings',
-            bindable: true,
-            hidden: content => content.variableId,
-            defaultValue: '',
         },
         submitButton: {
             hidden: true,
