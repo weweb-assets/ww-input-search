@@ -40,27 +40,13 @@ export default {
             },
             defaultValue: '50%',
         },
-        variableId: {
+        value: {
             label: {
-                en: 'Associated variable',
-            },
-            type: 'Variable',
-            options: {
-                types: ['String', 'Number', 'Query'],
-            },
-            section: 'settings',
-            hidden: content => content.variableId,
-            defaultValue: null,
-        },
-        initialValue: {
-            label: {
-                en: 'Initial value',
+                en: 'Value',
             },
             type: 'Text',
             section: 'settings',
             bindable: true,
-            hidden: content => content.variableId,
-            defaultValue: '',
         },
         submitEvent: {
             label: {
