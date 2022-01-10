@@ -6,6 +6,7 @@
                 class="textInput"
                 v-bind="content.textInput"
                 :ww-props="{ value, delay }"
+                :name="wwElementState.name"
                 @element-event="handleInputChange"
             ></wwElement>
         </div>
@@ -22,8 +23,6 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-
 export default {
     props: {
         /* wwEditor:start */
@@ -31,18 +30,12 @@ export default {
         /* wwEditor:end */
         content: { type: Object, required: true },
         uid: { type: String, required: true },
+        wwElementState: { type: Object, required: true },
     },
     emits: ['update:content', 'trigger-event'],
     setup(props) {
-        const internalVariableId = computed(() => props.content.variableId);
-        const variableId = wwLib.wwVariable.useComponentVariable(props.uid, 'value', '', internalVariableId);
-
-        return { variableId };
-    },
-    data() {
-        return {
-            internalValue: '',
-        };
+        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(props.uid, 'value', '');
+        return { variableValue, setValue };
     },
     computed: {
         isEditing() {
@@ -83,35 +76,24 @@ export default {
         },
         value: {
             get() {
-                if (this.variableId) return wwLib.wwVariable.getValue(this.variableId);
-                return this.internalValue;
+                return `${this.variableValue}`;
             },
             set(value) {
-                const eventName = this.content.submitEvent === 'debounce' ? 'change' : 'submit';
-                this.$emit('trigger-event', { name: eventName, event: { value } });
-                this.internalValue = value;
-
-                if (this.variableId) wwLib.wwVariable.updateValue(this.variableId, value);
+                if (value !== this.variableValue) {
+                    const eventName = this.content.submitEvent === 'debounce' ? 'change' : 'submit';
+                    this.$emit('trigger-event', { name: eventName, event: { value } });
+                    this.setValue(value);
+                }
             },
         },
         delay() {
             return wwLib.wwUtils.getLengthUnit(this.content.debounceDelay)[0];
         },
     },
-    /* wwEditor:start */
     watch: {
-        'content.initialValue'(value) {
-            if (value !== undefined && !this.content.variableId) {
-                this.value = value;
-            }
+        'content.value'(value) {
+            this.value = value;
         },
-    },
-    /* wwEditor:end */
-    mounted() {
-        if (this.content.initialValue !== undefined && !this.content.variableId) {
-            this.value = this.content.initialValue;
-        }
-        this.internalValue = this.value;
     },
     methods: {
         handleInputChange(value) {
