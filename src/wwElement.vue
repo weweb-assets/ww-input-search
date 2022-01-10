@@ -90,13 +90,11 @@ export default {
             return wwLib.wwUtils.getLengthUnit(this.content.debounceDelay)[0];
         },
     },
-    /* wwEditor:start */
     watch: {
         'content.value'(value) {
             this.value = value;
         },
     },
-    /* wwEditor:end */
     methods: {
         handleInputChange(value) {
             if (this.content.submitEvent !== 'debounce') return;
