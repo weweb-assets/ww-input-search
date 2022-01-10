@@ -76,7 +76,7 @@ export default {
         },
         value: {
             get() {
-                return this.variableValue.toString();
+                return `${this.variableValue}`;
             },
             set(value) {
                 if (value !== this.variableValue) {
