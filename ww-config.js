@@ -42,7 +42,7 @@ export default {
         },
         value: {
             label: {
-                en: 'Value',
+                en: 'Init value',
             },
             type: 'Text',
             section: 'settings',
