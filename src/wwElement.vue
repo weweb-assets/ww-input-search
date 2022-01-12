@@ -90,8 +90,10 @@ export default {
         },
     },
     watch: {
-        'content.value'(newValue, OldValue) {
-            if (newValue === OldValue) return;
+        'content.value'(newValue) {
+            newValue = `${newValue}`;
+            if (newValue === this.value) return;
+            this.tempValue = newValue;
             this.setValue(newValue);
             this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
         },
