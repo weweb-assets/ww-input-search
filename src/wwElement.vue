@@ -2,7 +2,6 @@
     <div class="ww-webapp-search" :style="cssVariables" :class="{ editing: isEditing, selected: isSelected }">
         <div class="input-container">
             <wwElement
-                ref="searchInput"
                 class="textInput"
                 v-bind="content.textInput"
                 :ww-props="{ value, delay }"
@@ -34,8 +33,17 @@ export default {
     },
     emits: ['update:content', 'trigger-event'],
     setup(props) {
-        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(props.uid, 'value', '');
+        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(
+            props.uid,
+            'value',
+            props.content.value === undefined ? '' : props.content.value
+        );
         return { variableValue, setValue };
+    },
+    data() {
+        return {
+            tempValue: '',
+        };
     },
     computed: {
         isEditing() {
@@ -74,34 +82,33 @@ export default {
                 '--button-width': buttonWidth,
             };
         },
-        value: {
-            get() {
-                return `${this.variableValue}`;
-            },
-            set(value) {
-                if (value !== this.variableValue) {
-                    const eventName = this.content.submitEvent === 'debounce' ? 'change' : 'submit';
-                    this.$emit('trigger-event', { name: eventName, event: { value } });
-                    this.setValue(value);
-                }
-            },
+        value() {
+            return `${this.variableValue}`;
         },
         delay() {
             return wwLib.wwUtils.getLengthUnit(this.content.debounceDelay)[0];
         },
     },
     watch: {
-        'content.value'(value) {
-            this.value = value;
+        'content.value'(newValue) {
+            newValue = `${newValue}`;
+            if (newValue === this.value) return;
+            this.tempValue = newValue;
+            this.setValue(newValue);
+            this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
         },
     },
     methods: {
         handleInputChange(value) {
+            this.tempValue = value;
             if (this.content.submitEvent !== 'debounce') return;
-            this.value = value;
+            if (value === this.value) return;
+            this.setValue(value);
+            this.$emit('trigger-event', { name: 'debounce', event: { value } });
         },
         handleClick() {
-            this.value = this.$refs.searchInput.value;
+            this.setValue(this.tempValue);
+            this.$emit('trigger-event', { name: 'submit', event: { value: this.tempValue } });
         },
     },
 };
