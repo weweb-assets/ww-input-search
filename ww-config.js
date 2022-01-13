@@ -9,10 +9,43 @@ export default {
     triggerEvents: [
         { name: 'submit', label: { en: 'On submit' }, event: { value: '' } },
         { name: 'change', label: { en: 'On change' }, event: { value: '' } },
+        { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
     ],
     properties: {
+        inputWidth: {
+            type: 'Length',
+            label: {
+                en: 'Input width',
+                fr: 'Input width',
+            },
+            options: {
+                unitChoices: [{ value: '%', label: '%', min: 0, max: 100 }],
+            },
+            defaultValue: '50%',
+            hidden: content => !content.useSubmitButton,
+        },
+        value: {
+            label: {
+                en: 'Init value',
+            },
+            type: 'Text',
+            section: 'settings',
+            bindable: true,
+        },
+        useSubmitButton: {
+            label: {
+                en: 'Use a submit button',
+                fr: 'Utiliser un bouton',
+            },
+            type: 'OnOff',
+            section: 'settings',
+            responsive: true,
+            bindable: true,
+            defaultValue: false,
+        },
         buttonPosition: {
-            hidden: content => content.submitEvent !== 'button',
+            section: 'settings',
+            hidden: content => !content.useSubmitButton,
             label: {
                 en: 'Button position',
                 fr: 'Position du bouton',
@@ -29,42 +62,6 @@ export default {
             responsive: true,
             defaultValue: 'right',
         },
-        inputWidth: {
-            type: 'Length',
-            label: {
-                en: 'Input width',
-                fr: 'Input width',
-            },
-            options: {
-                unitChoices: [{ value: '%', label: '%', min: 0, max: 100 }],
-            },
-            defaultValue: '50%',
-        },
-        value: {
-            label: {
-                en: 'Init value',
-            },
-            type: 'Text',
-            section: 'settings',
-            bindable: true,
-        },
-        submitEvent: {
-            label: {
-                en: 'Submit event',
-                fr: 'Evenement de soumission',
-            },
-            type: 'TextSelect',
-            options: {
-                options: [
-                    { value: 'debounce', label: { en: 'On change' } },
-                    { value: 'button', label: { en: 'Button' } },
-                ],
-            },
-            section: 'settings',
-            responsive: true,
-            bindable: true,
-            defaultValue: 'debounce',
-        },
         debounceDelay: {
             type: 'Length',
             label: {
@@ -76,15 +73,6 @@ export default {
             },
             section: 'settings',
             defaultValue: '500ms',
-        },
-        enterKey: {
-            type: 'OnOff',
-            label: {
-                en: 'Submitting by pressing enter',
-                fr: 'Submitting by pressing enter',
-            },
-            section: 'settings',
-            defaultValue: true,
         },
         submitButton: {
             hidden: true,
