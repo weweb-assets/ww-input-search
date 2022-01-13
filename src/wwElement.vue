@@ -7,10 +7,11 @@
                 :ww-props="{ value, delay }"
                 :name="wwElementState.name"
                 @element-event="handleInputChange"
+                @keypress.enter="submit"
             ></wwElement>
         </div>
-        <div v-if="content.submitEvent === 'button'" class="button-container">
-            <wwElement class="submitButton" v-bind="content.submitButton" @click="handleClick"></wwElement>
+        <div v-if="content.useSubmitButton" class="button-container">
+            <wwElement class="submitButton" v-bind="content.submitButton" @click="submit"></wwElement>
         </div>
 
         <!-- wwEditor:start -->
@@ -39,11 +40,6 @@ export default {
             props.content.value === undefined ? '' : props.content.value
         );
         return { variableValue, setValue };
-    },
-    data() {
-        return {
-            tempValue: '',
-        };
     },
     computed: {
         isEditing() {
@@ -78,7 +74,7 @@ export default {
 
             return {
                 '--container-direction': flexDirection,
-                '--input-width': this.content.inputWidth,
+                '--input-width': this.content.useSubmitButton ? this.content.inputWidth : '100%',
                 '--button-width': buttonWidth,
             };
         },
@@ -93,22 +89,21 @@ export default {
         'content.value'(newValue) {
             newValue = `${newValue}`;
             if (newValue === this.value) return;
-            this.tempValue = newValue;
             this.setValue(newValue);
             this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
         },
     },
     methods: {
-        handleInputChange(value) {
-            this.tempValue = value;
-            if (this.content.submitEvent !== 'debounce') return;
-            if (value === this.value) return;
-            this.setValue(value);
-            this.$emit('trigger-event', { name: 'debounce', event: { value } });
+        handleInputChange({ type, value }) {
+            if (value !== this.value) {
+                this.setValue(value);
+            }
+            if (type === 'debounce') {
+                this.$emit('trigger-event', { name: 'change', event: { value } });
+            }
         },
-        handleClick() {
-            this.setValue(this.tempValue);
-            this.$emit('trigger-event', { name: 'submit', event: { value: this.tempValue } });
+        submit() {
+            this.$emit('trigger-event', { name: 'submit', event: { value: this.value } });
         },
     },
 };
