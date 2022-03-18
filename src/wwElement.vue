@@ -34,11 +34,12 @@ export default {
     },
     emits: ['update:content', 'trigger-event'],
     setup(props) {
-        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(
-            props.uid,
-            'value',
-            props.content.value === undefined ? '' : props.content.value
-        );
+        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
+            uid: props.uid,
+            name: 'value',
+            defaultValue: props.content.value,
+            sanitizer: value => value === undefined ? '' : String(value)
+        });
         return { variableValue, setValue };
     },
     computed: {
@@ -79,18 +80,18 @@ export default {
             };
         },
         value() {
-            return `${this.variableValue}`;
+            return this.variableValue;
         },
         delay() {
             return wwLib.wwUtils.getLengthUnit(this.content.debounceDelay)[0];
         },
     },
     watch: {
-        'content.value'(newValue) {
-            newValue = `${newValue}`;
-            if (newValue === this.value) return;
-            this.setValue(newValue);
-            this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
+        'content.value'(value) {
+            const { newValue, hasChanged } = this.setValue(value);
+            if (hasChanged) {
+                this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
+            }
         },
     },
     methods: {
