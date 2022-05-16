@@ -100,7 +100,7 @@ export default {
                 this.setValue(value);
             }
             if (type === 'debounce') {
-                this.$emit('trigger-event', { name: 'change', event: { value } });
+                this.$emit('trigger-event', { name: 'change', event: { domEvent:{}, value } });
             }
         },
         submit() {
