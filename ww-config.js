@@ -5,6 +5,9 @@ export default {
             fr: 'Search bar',
         },
         icon: 'fontawesome/solid/search',
+        bubble: {
+            icon: 'fontawesome/solid/search',
+        },
     },
     triggerEvents: [
         { name: 'submit', label: { en: 'On submit' }, event: { value: '' } },
@@ -43,6 +46,34 @@ export default {
             bindable: true,
             defaultValue: false,
         },
+        isEmbedIcon: {
+            label: {
+                en: 'Embed icon',
+                fr: 'Icône intégrée',
+            },
+            type: 'OnOff',
+            section: 'settings',
+            responsive: true,
+            bindable: true,
+            defaultValue: false,
+        },
+        iconPosition: {
+            section: 'settings',
+            hidden: content => !content.isEmbedIcon,
+            label: {
+                en: 'Icon position',
+                fr: "Position de l'icone",
+            },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'right', label: { en: 'Right' } },
+                    { value: 'left', label: { en: 'Left' } },
+                ],
+            },
+            responsive: true,
+            defaultValue: 'right',
+        },
         buttonPosition: {
             section: 'settings',
             hidden: content => !content.useSubmitButton,
@@ -75,8 +106,18 @@ export default {
             defaultValue: '500ms',
         },
         submitButton: {
+            navigator: {
+                hidden: content => !content.useSubmitButton,
+            },
             hidden: true,
             defaultValue: { isWwObject: true, type: 'ww-button' },
+        },
+        embedIcon: {
+            navigator: {
+                hidden: content => !content.isEmbedIcon,
+            },
+            hidden: true,
+            defaultValue: { isWwObject: true, type: 'ww-icon' },
         },
         textInput: {
             hidden: true,
