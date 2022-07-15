@@ -2,23 +2,27 @@
     <div class="ww-webapp-search" :style="cssVariables" :class="{ editing: isEditing, selected: isSelected }">
         <div class="input-container">
             <wwElement
-                class="textInput"
+                v-if="content.isEmbedIcon && content.iconPosition === 'left'"
+                class="embedIcon"
+                v-bind="content.embedIcon"
+            />
+            <wwElement
+                class="text-input"
                 v-bind="content.textInput"
                 :ww-props="{ value, delay }"
                 :name="wwElementState.name"
                 @element-event="handleInputChange"
                 @keypress.enter="submit"
-            ></wwElement>
+            />
+            <wwElement
+                v-if="content.isEmbedIcon && content.iconPosition === 'right'"
+                class="embedIcon"
+                v-bind="content.embedIcon"
+            />
         </div>
         <div v-if="content.useSubmitButton" class="button-container">
-            <wwElement class="submitButton" v-bind="content.submitButton" @click="submit"></wwElement>
+            <wwElement class="submitButton" v-bind="content.submitButton" @click="submit" />
         </div>
-
-        <!-- wwEditor:start -->
-        <div class="ww-webapp-search__menu">
-            <wwEditorIcon small name="fontawesome/solid/search" />
-        </div>
-        <!-- wwEditor:end -->
     </div>
 </template>
 
@@ -115,6 +119,7 @@ export default {
     --container-direction: row;
 }
 .ww-webapp-search {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: var(--container-direction);
@@ -122,10 +127,7 @@ export default {
 
     .input-container {
         width: var(--input-width);
-
-        .text-input {
-            width: 100%;
-        }
+        display: flex;
     }
 
     .button-container {
@@ -135,67 +137,5 @@ export default {
             width: 100%;
         }
     }
-
-    /* wwEditor:start */
-    &__status {
-        position: absolute;
-        top: -1px;
-        color: var(--ww-color-white);
-        padding: var(--ww-spacing-00) var(--ww-spacing-01);
-        border-radius: var(--ww-spacing-00);
-        background-color: var(--ww-color-blue-500);
-        z-index: 10;
-        opacity: 0;
-        pointer-events: none;
-        right: -1px;
-    }
-    &.selected {
-        > .ww-webapp-search__status {
-            opacity: 1;
-            pointer-events: all;
-        }
-    }
-    &.editing:hover {
-        & > .border {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 1px solid var(--ww-editor-color);
-            pointer-events: none;
-            z-index: 10;
-        }
-        > .ww-webapp-search__menu {
-            opacity: 1;
-            pointer-events: all;
-        }
-    }
-    &__menu {
-        display: flex;
-        position: absolute;
-        top: 0px;
-        left: 5px;
-        transform: translate(-50%, -50%);
-        border-radius: 100%;
-        padding: var(--ww-spacing-01);
-        transition: opacity 0.2s ease;
-        z-index: 101;
-        cursor: pointer;
-        background-color: var(--ww-color-blue-500);
-        color: var(--ww-color-white);
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        pointer-events: none;
-        &:after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-        }
-    }
-    /* wwEditor:end */
 }
 </style>
