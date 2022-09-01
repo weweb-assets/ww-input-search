@@ -11,7 +11,7 @@ export default {
     },
     triggerEvents: [
         { name: 'submit', label: { en: 'On submit' }, event: { value: '' } },
-        { name: 'change', label: { en: 'On change' }, event: { value: '' } },
+        { name: 'change', label: { en: 'On change' }, event: { value: '' }, default: true },
         { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
     ],
     properties: {
