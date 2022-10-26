@@ -4,9 +4,9 @@ export default {
             en: 'Search bar',
             fr: 'Search bar',
         },
-        icon: 'fontawesome/solid/search',
+        icon: 'search',
         bubble: {
-            icon: 'fontawesome/solid/search',
+            icon: 'search',
         },
     },
     triggerEvents: [
