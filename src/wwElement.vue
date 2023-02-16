@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+
 export default {
     props: {
         /* wwEditor:start */
@@ -42,7 +44,7 @@ export default {
             uid: props.uid,
             name: 'value',
             type: 'string',
-            defaultValue: props.content.value === undefined ? '' : props.content.value,
+            defaultValue: computed(() => props.content.value === undefined ? '' : props.content.value),
         });
         return { variableValue, setValue };
     },
