@@ -9,6 +9,9 @@ export default {
             icon: 'search',
         },
     },
+    options: {
+        displayAllowedValues: ['flex', 'inline-flex'],
+    },
     triggerEvents: [
         { name: 'submit', label: { en: 'On submit' }, event: { value: '' } },
         { name: 'change', label: { en: 'On change' }, event: { value: '' }, default: true },
