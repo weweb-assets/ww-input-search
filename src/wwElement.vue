@@ -122,8 +122,6 @@ export default {
 }
 .ww-webapp-search {
     position: relative;
-    width: 100%;
-    display: flex;
     flex-direction: var(--container-direction);
     align-items: center;
 
