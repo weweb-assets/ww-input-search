@@ -13,9 +13,9 @@ export default {
         displayAllowedValues: ['flex', 'inline-flex'],
     },
     triggerEvents: [
-        { name: 'submit', label: { en: 'On submit' }, event: { value: '' } },
-        { name: 'change', label: { en: 'On change' }, event: { value: '' }, default: true },
-        { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
+        { name: 'submit', label: { en: 'On submit' }, event: { value: '' }, description: "Run when the form is submitted." },
+        { name: 'change', label: { en: 'On change' }, event: { value: '' }, default: true, description: "Run when the value changes." },
+        { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' }, description: "Run when the initial value changes." },
     ],
     properties: {
         inputWidth: {
